@@ -19,7 +19,7 @@ processus. Cet espace mémoire contient :
 
 Le problème c’est que les programmes stockent au même endroit des  données pouvant être contrôlées par l’utilisateur et des données qui contrôlent le cours d'exécution du programme. 
 
-## <img title="" src="file:///C:/labo/assets/2022-02-27-15-39-07-image.png" alt="" width="854">
+## <img title="" src="assets/2022-02-27-15-39-07-image.png" alt="" width="854">
 
 ### La stack
 
@@ -27,7 +27,7 @@ La stack est une structure de données utilisée par les fonctions pour
  stocker et utiliser des variables locales. Le processeur utilise 2 
 instructions pour placer et retirer des données de la stack, `PUSH` pour pousser des données, et `POP` pour retirer. La stack fonctionne sur le principe de `LIFO` (last in, first out).
 
-![](C:\labo\assets\2022-02-27-16-56-41-image.png)
+![](assets\2022-02-27-16-56-41-image.png)
 
 Le registre ESP du processeur pointera sur le début de la stack. 
 
@@ -61,7 +61,7 @@ on peut définir de nouvelles valeurs en écrasant les données de
 le code malveillant. Ce changement modifie le cours 
 de l’exécution du programme et transfère le contrôle au code malveillant.
 
-![](C:\labo\assets\2022-02-27-17-31-48-image.png)
+![](assets\2022-02-27-17-31-48-image.png)
 
 ## Quasar 0
 
@@ -275,7 +275,7 @@ Pour que notre binaire s'exécute sans souci et aussi pour que les offsets de la
 
 Avec `ldd` nous pouvons voir à quelle libc notre binaire est liée et son emplacement.
 
-![](C:\labo\assets\2022-02-27-18-00-00-image.png)
+![](assets\2022-02-27-18-00-00-image.png)
 
 Analysons le code source du binaire :
 
@@ -307,7 +307,7 @@ Checkons quelles sont les sécurités appliquées sur notre binaire:
 
 `checksec ./quasar4`
 
-![](C:\labo\assets\2022-02-27-18-13-56-image.png)
+![](assets\2022-02-27-18-13-56-image.png)
 
 Nous pouvons voir NX et PIE sont actives.
 
@@ -337,9 +337,9 @@ p.sendline(flow)    # on envoie en entree notre pattern de 100 char au programme
 p.interactive()
 ```
 
-![](C:\labo\assets\2022-02-27-19-08-39-image.png)
+![](assets\2022-02-27-19-08-39-image.png)
 
-![](C:\labo\assets\2022-02-27-19-11-39-image.png)
+![](assets\2022-02-27-19-11-39-image.png)
 
 Notre programme a crashé et nous pouvons voir que le registre `eip` contient `eaaa`
 
@@ -347,13 +347,13 @@ nous contrôlons donc le cours d'exécution du programme.
 
 Pour trouver combien de caractère il nous faut pour écraser eip j'utilise `cyclic_find`:
 
-![](C:\labo\assets\2022-02-27-19-15-13-image.png)
+![](assets\2022-02-27-19-15-13-image.png)
 
 Maintenant que nous contrôlons eip ou allons à quelle adresse allons nous faire notre programme sauter. La libc contient des fonctions qui nous aident lorsque nous écrivons nos programmes. Par exemple lorsque notre programme fait appel a printf, il va se rendre dans la libc pour exécuter la fonction printf. On peut trouver dans la libc des fonctions comme `system` et `execve,` qui nous serons utiles pour prendre le contrôle de la machine.
 
 Nous pouvons trouver l'offset de ces fonctions avec `readelf -s ./libc.so.6 | grep "system"` :
 
-![](C:\labo\assets\2022-02-27-19-41-13-image.png)
+![](assets\2022-02-27-19-41-13-image.png)
 
 Grâce au leak de la fonction printf présent dans le programme nous pourrons calculer et trouver la vraie adresse des fonctions dans notre libc et de nos gadgets.
 
@@ -381,7 +381,7 @@ Vérifions si notre libc contient la chaine de caractère `"/bin/sh"` afin de fa
 
 `strings -a -t x /lib32/libc.so.6 | grep "/bin/sh"`
 
-![](C:\labo\assets\2022-02-27-19-54-45-image.png)
+![](assets\2022-02-27-19-54-45-image.png)
 
 Il suffit maintenant de placer l'adresse de notre fonction system suivie de celle de notre chaine de caractère `/bin/sh`:
 
